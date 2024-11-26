@@ -4,9 +4,23 @@ import Player from './components/Player';
 
 function App() {
   const [activePlayer, setActivePlayer] = useState('X');
+  const [gameTurns, setGameTurns] = useState([]);
 
-  function handleSelectSquare() {
+  function handleSelectSquare(rowIndex, colIndex) {
     setActivePlayer(() => (activePlayer === 'X' ? '0' : 'X'));
+
+    setGameTurns((prevTurns) => {
+      let currentPlayer = 'X';
+      if (gameTurns.length > 0 && gameTurns[0].player === 'X') {
+        currentPlayer = '0';
+      }
+
+      const updatedTurns = [
+        { square: { row: rowIndex, col: colIndex }, player: currentPlayer },
+        ...prevTurns,
+      ];
+      return updatedTurns;
+    });
   }
 
   return (
@@ -24,8 +38,9 @@ function App() {
             isActive={activePlayer === '0'}
           />
         </ol>
-        <GameBoard onSelect={handleSelectSquare} activeSymbol={activePlayer} />
+        <GameBoard onSelect={handleSelectSquare} turns={gameTurns} />
       </div>
+      LOGS
     </main>
   );
 }
